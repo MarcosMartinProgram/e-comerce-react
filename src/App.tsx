@@ -12,24 +12,29 @@ import CreateProduct from './components/CreateProduct';
 import EditProduct from './components/EditProduct';
 import CartDetail from './components/CartDetail';
 import Navbar from './components/Navbar/Navbar';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:id" element={<ProductDetail />} />
-        <Route path="/products/create" element={<CreateProduct />} />
-        <Route path="/products/edit/:id" element={<EditProduct />} />
-        <Route path="/cart-detail" element={<CartDetail />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/products/create" element={<CreateProduct />} />
+          <Route path="/products/edit/:id" element={<EditProduct />} />
+          <Route path="/cart-detail" element={<CartDetail />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+      </QueryClientProvider>
   );
 }
 

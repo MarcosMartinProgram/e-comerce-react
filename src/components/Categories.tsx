@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Categories.css';
+import {QUERY_KEY_CATEGORIES} from '../constantes/QueryKey'
+import {useQuery} from 'react-query'
 
 interface Category {
   id: number;
@@ -11,11 +13,9 @@ interface Category {
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
-  const fetchCategories = async () => {
+
+  const query = useQuery(QUERY_KEY_CATEGORIES, async () => {
     try {
       const response = await fetch('https://api.escuelajs.co/api/v1/categories/');
       const data = await response.json();
@@ -23,7 +23,9 @@ const Categories = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
+
+  
 
   return (
     <div>
