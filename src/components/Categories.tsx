@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import './Categories.css';
 import {QUERY_KEY_CATEGORIES} from '../constantes/QueryKey'
 import {useQuery} from 'react-query'
+import Loading from './Loading.tsx'
+import Error from './Error.tsx'
 
 interface Category {
   id: number;
@@ -12,6 +14,8 @@ interface Category {
 
 const Categories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
 
 
@@ -20,10 +24,21 @@ const Categories = () => {
       const response = await fetch('https://api.escuelajs.co/api/v1/categories/');
       const data = await response.json();
       setCategories(data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setError("Error al cargar los personajes");
+      setLoading(false);
     }
   });
+
+  if (query.isLoading) {
+    return <Loading />
+  }
+
+  if (query.isError) {
+    return <Error message={error} />
+  }
 
   
 

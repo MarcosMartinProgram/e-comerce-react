@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
+
 import './Navbar.css';
 
 const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const { isAuthenticated, logout } = useContext(AuthContext);
 
   const handleClick = () => {
     setIsMobile(!isMobile);
+  };
+
+  const handleLogout = () => {
+    
+    logout();
   };
 
   return (
@@ -26,10 +34,15 @@ const Navbar = () => {
           <li className="navbar-item">
             <Link to="/">Home</Link>
           </li>
-          <li className="navbar-item">
-            <Link to="/login">Login</Link>
-          </li>
-                    {/* Add more menu items here */}
+          {isAuthenticated ? (
+            <li className="navbar-item">
+              <button onClick={handleLogout}>Logout</button>
+            </li>
+          ) : (
+            <li className="navbar-item">
+              <Link to="/login">Login</Link>
+            </li>
+          )}
         </ul>
       </div>
 
@@ -45,3 +58,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
