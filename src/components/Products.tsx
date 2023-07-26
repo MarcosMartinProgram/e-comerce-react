@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import './Products.css';
 import { useQuery } from 'react-query';
 import { QUERY_KEY_PRODUCTS } from '../constantes/QueryKey';
+import Loading from './Loading';
+import Error from './Error'
 
 interface Product {
   id: number;
@@ -23,6 +25,9 @@ const Products = () => {
   const category = searchParams.get('category');
 
   const [selectedCategory, setSelectedCategory] = useState<string>(category || '');
+  const [priceFilter, setPriceFilter] = useState<number | null>(null);
+  const [priceRangeFilter, setPriceRangeFilter] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
+  const [titleFilter, setTitleFilter] = useState<string>('');
 
   const { data: products, isLoading, isError } = useQuery<Product[]>(QUERY_KEY_PRODUCTS, async () => {
     const response = await fetch('https://api.escuelajs.co/api/v1/products/');
@@ -31,12 +36,27 @@ const Products = () => {
   });
 
   const filterProducts = () => {
-    if (selectedCategory && products) {
-      const filtered = products.filter((product) => product.category.name.toLowerCase() === selectedCategory.toLowerCase());
-      return filtered;
+    let filtered = products;
+  
+    if (selectedCategory) {
+      filtered = filtered.filter((product) => product.category.name.toLowerCase() === selectedCategory.toLowerCase());
     }
-    return products;
+  
+    if (priceFilter) {
+      filtered = filtered.filter((product) => product.price === priceFilter);
+    }
+  
+    if (priceRangeFilter.min && priceRangeFilter.max) {
+      filtered = filtered.filter((product) => product.price >= priceRangeFilter.min && product.price <= priceRangeFilter.max);
+    }
+  
+    if (titleFilter) {
+      filtered = filtered.filter((product) => product.title.toLowerCase().includes(titleFilter.toLowerCase()));
+    }
+  
+    return filtered;
   };
+  
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(event.target.value);
@@ -47,11 +67,11 @@ const Products = () => {
   }, [products, selectedCategory]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (isError) {
-    return <div>Error fetching products</div>;
+    return <Error message={error} />;
   }
 
   return (
@@ -67,6 +87,36 @@ const Products = () => {
           ))}
         </select>
       </div>
+      <input
+        type="number"
+        placeholder="Price"
+        value={priceFilter || ''}
+        onChange={(e) => setPriceFilter(e.target.value !== '' ? parseInt(e.target.value, 10) : null)}
+      />
+      <div>
+        <input
+          type="number"
+          placeholder="Min Price"
+          value={priceRangeFilter.min || ''}
+          onChange={(e) =>
+            setPriceRangeFilter((prev) => ({ ...prev, min: e.target.value !== '' ? parseInt(e.target.value, 10) : null }))
+          }
+        />
+        <input
+          type="number"
+          placeholder="Max Price"
+          value={priceRangeFilter.max || ''}
+          onChange={(e) =>
+            setPriceRangeFilter((prev) => ({ ...prev, max: e.target.value !== '' ? parseInt(e.target.value, 10) : null }))
+          }
+        />
+      </div>
+      <input
+        type="text"
+        placeholder="Title"
+        value={titleFilter}
+        onChange={(e) => setTitleFilter(e.target.value)}
+      />
       {selectedCategory && <h2>Category: {selectedCategory}</h2>}
       <div className="product-list">
         {filterProducts()?.map((product) => (
