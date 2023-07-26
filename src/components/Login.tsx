@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, ChangeEvent, FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthContext';
 
@@ -7,45 +7,44 @@ const Login = () => {
   const { isAuthenticated, login, logout } = useContext(AuthContext);
   const [userName, setUserName] = useState('');
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    email: string;
+    password: string;
+  }>({
     email: '',
     password: '',
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
       const response = await fetch('https://api.escuelajs.co/api/v1/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: new URLSearchParams(formData).toString(),
+        body: JSON.stringify(formData),
       });
       const data = await response.json();
       const { access_token, refresh_token } = data;
-      
-      login(access_token);
+
+      login(access_token, formData.email);
       localStorage.setItem('accessToken', access_token);
-      
       localStorage.setItem('refreshToken', refresh_token);
-      setUserName(formData.email); 
+      setUserName(formData.email);
       navigate('/');
     } catch (error) {
       console.log(error);
     }
+    
   };
 
   const handleLogout = () => {
-    
-    localStorage.removeItem('accessToken');
-    
     logout();
-    
     navigate('/login');
   };
 
@@ -78,6 +77,8 @@ const Login = () => {
 };
 
 export default Login;
+
+
 
 
 

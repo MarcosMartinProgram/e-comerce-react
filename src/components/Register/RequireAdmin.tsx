@@ -4,19 +4,19 @@ import { AuthContext } from '../../contexts/AuthContext';
 
 interface RequireAdminProps {
   children: ReactNode;
+  fallback?: ReactNode; // Opcional, el componente que se mostrará si el usuario no es admin
 }
 
-const RequireAdmin = ({ children }: RequireAdminProps) => {
+const RequireAdmin = ({ children, fallback }: RequireAdminProps) => {
   const authContext = useContext(AuthContext);
 
   if (!authContext.isAuthenticated || authContext.userData?.role !== 'admin') {
-    
-    return <Navigate to="/" replace />;
+    return fallback ? fallback : <Navigate to="/" replace />;
   }
 
-  
   return <>{children}</>;
 };
 
 export default RequireAdmin;
+
 

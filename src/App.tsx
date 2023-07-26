@@ -1,15 +1,15 @@
-import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import PrivateRoute from './components/PrivateRoute';
 import NotFound from './components/NotFound';
 import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register/Register';
-import Categories from './components/Categories';
-import Products from './components/Products';
+import Categories from './components/Categories/Categories';
+import CreateCategory from './components/Categories/CreateCategory'
+import EditCategory from './components/Categories/EditCategory';
+import Products from './components/Products/Products';
 import ProductDetail from './components/ProductDetail';
-import CreateProduct from './components/CreateProduct';
-import EditProduct from './components/EditProduct';
+import CreateProduct from './components/Products/CreateProduct';
+import EditProduct from './components/Products/EditProduct';
 import CartDetail from './components/CartDetail';
 import Navbar from './components/Navbar/Navbar';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -29,8 +29,8 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/login" element={
-              <RedirectIfAuthenticated> 
-                <Login /> 
+              <RedirectIfAuthenticated>
+                <Login />
               </RedirectIfAuthenticated>} />
             <Route path="/register" element={
               <RedirectIfAuthenticated>
@@ -52,12 +52,24 @@ function App() {
                   <EditProduct />
                 </RequireAdmin>
               </RequireAuth>} />
+            <Route path="/categories/create" element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <CreateCategory />
+                </RequireAdmin>
+              </RequireAuth>} />
+            <Route path="/categories/edit/:id" element={
+              <RequireAuth>
+                <RequireAdmin>
+                  <EditCategory />
+                </RequireAdmin>
+              </RequireAuth>} />  
             <Route path="/cart-detail" element={<CartDetail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
       </AuthProvider>
-      </QueryClientProvider>
+    </QueryClientProvider>
   );
 }
 

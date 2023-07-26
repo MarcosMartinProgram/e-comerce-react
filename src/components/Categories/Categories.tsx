@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import './Categories.css';
-import {QUERY_KEY_CATEGORIES} from '../constantes/QueryKey'
+import {QUERY_KEY_CATEGORIES} from '../../constantes/QueryKey'
 import {useQuery} from 'react-query'
-import Loading from './Loading.tsx'
-import Error from './Error.tsx'
+import Loading from '../Loading.tsx'
+import Error from '../Error.tsx'
+import { AuthContext, UserData } from '../../contexts/AuthContext';
 
 interface Category {
   id: number;
@@ -13,6 +14,7 @@ interface Category {
 }
 
 const Categories = () => {
+  const { isAuthenticated, userData,  } = useContext(AuthContext);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,11 +42,17 @@ const Categories = () => {
     return <Error message={error} />
   }
 
-  
+  const isAdmin = () => {
+    return isAuthenticated && userData?.role === 'admin';
+  };
+  const isUserAdmin = isAdmin(userData);
 
   return (
     <div>
       <h1>Categories</h1>
+      {isAdmin() && (
+        <Link to="/categories/create">Crear Categoria</Link>
+      )}
       <div className="category-list">
         {categories.map((category) => (
           <div className="category-card" key={category.id}>
@@ -53,6 +61,9 @@ const Categories = () => {
             <Link to={`/products?category=${category.name.toLowerCase()}`}>
               View Products
             </Link>
+            {isAdmin() && (
+              <Link to={`/categories/edit/${category.id}`}>Editar Categoria</Link>
+            )}
           </div>
         ))}
       </div>
