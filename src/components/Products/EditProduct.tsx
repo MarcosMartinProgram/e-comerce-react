@@ -5,12 +5,12 @@ import Loading from '../Loading';
 import { AuthContext } from '../../contexts/AuthContext';
 
 interface EditProductProps {
- 
+ id:'',
 }
 
 const EditProduct: React.FC<EditProductProps> = () => {
-  const { id } = useParams<{ id: string }>();
-  const productId = parseInt(id, 10);
+  const { id } = useParams<{ id?: string }>();
+  const productId = parseInt(id || '', 10);
   
   const [formData, setFormData] = useState<{
     title: string;
@@ -21,7 +21,7 @@ const EditProduct: React.FC<EditProductProps> = () => {
     price: 0,
     images: [],
   });
-  const { isAuthenticated, userData, isAdmin } = useContext(AuthContext);
+  const { userData, isAdmin } = useContext(AuthContext);
 
   
   const getProductQuery = useQuery(['product', productId], () =>

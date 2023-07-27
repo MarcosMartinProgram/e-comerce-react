@@ -1,6 +1,6 @@
-import React, { useState, useContext, ChangeEvent, FormEvent } from 'react';
+import { useState, useContext, ChangeEvent, FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext, UserData } from '../contexts/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -31,8 +31,18 @@ const Login = () => {
       });
       const data = await response.json();
       const { access_token, refresh_token } = data;
+      console.log(formData)
 
-      login(access_token, formData.email);
+      const userData: UserData = {
+        id: 0, // Puedes dejarlo como 0 o asignar un valor adecuado
+        email: formData.email,
+        password: formData.password,
+        name: '', // Puedes dejarlo en blanco o asignar un valor adecuado
+        role: '', // Puedes dejarlo en blanco o asignar un valor adecuado
+        avatar: '', // Puedes dejarlo en blanco o asignar un valor adecuado
+      };
+
+      login(access_token, userData);
       localStorage.setItem('accessToken', access_token);
       localStorage.setItem('refreshToken', refresh_token);
       setUserName(formData.email);

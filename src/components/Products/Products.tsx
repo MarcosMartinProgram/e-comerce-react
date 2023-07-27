@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import { QUERY_KEY_PRODUCTS } from '../../constantes/QueryKey';
 import Loading from '../Loading';
 import Error from '../Error';
-import { AuthContext, UserData } from '../../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 
 interface Product {
@@ -59,9 +59,13 @@ const Products = () => {
       filtered = filtered.filter((product) => product.price === priceFilter);
     }
 
-    if (priceRangeFilter.min && priceRangeFilter.max) {
+    if (priceRangeFilter.min !== null && priceRangeFilter.max !== null) {
       filtered = filtered.filter(
-        (product) => product.price >= priceRangeFilter.min && product.price <= priceRangeFilter.max
+        (product) => {
+          const minPrice = priceRangeFilter.min;
+          const maxPrice = priceRangeFilter.max;
+          return minPrice !== null && maxPrice !== null && product.price >= minPrice && product.price <= maxPrice;
+        }
       );
     }
 
@@ -88,7 +92,7 @@ const Products = () => {
   if (isError) {
     return <Error message="Error al cargar los productos" />;
   }
-  const isUserAdmin = isAdmin(userData);
+  
 
   return (
     <div>

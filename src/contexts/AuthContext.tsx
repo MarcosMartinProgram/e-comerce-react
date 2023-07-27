@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-interface UserData {
+
+export interface UserData {
   id: number;
   email: string;
   password: string;
@@ -44,15 +44,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
 
-  const login = async (accessToken: string, email: string) => {
+  const login = async (accessToken: string, userData: UserData) => {
     setIsAuthenticated(true);
-    setUserData({ id: 0, email, password: '', name: '', role: '', avatar: '' }); // Seteamos solo el email inicialmente
+    setUserData({ id: 0, email: userData.email, password: '', name: '', role: '', avatar: '' }); 
 
     try {
       const response = await fetch('https://api.escuelajs.co/api/v1/auth/profile', {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${accessToken}`, // Incluir el token en el header
+          'Authorization': `Bearer ${accessToken}`, 
         },
       });
 
@@ -61,11 +61,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
 
       const userData = await response.json();
-      setUserData(userData); // Actualizar el estado con los datos completos del usuario
+      setUserData(userData); 
       localStorage.setItem('userData', JSON.stringify(userData));
     } catch (error) {
       console.log(error);
-      logout(); // Si ocurre un error, cerrar sesión
+      logout(); 
     }
   };
 

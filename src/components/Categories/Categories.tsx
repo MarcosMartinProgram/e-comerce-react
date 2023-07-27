@@ -5,7 +5,7 @@ import {QUERY_KEY_CATEGORIES} from '../../constantes/QueryKey'
 import {useQuery} from 'react-query'
 import Loading from '../Loading.tsx'
 import Error from '../Error.tsx'
-import { AuthContext, UserData } from '../../contexts/AuthContext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 interface Category {
   id: number;
@@ -16,7 +16,7 @@ interface Category {
 const Categories = () => {
   const { isAuthenticated, userData,  } = useContext(AuthContext);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  
   const [error, setError] = useState<string | null>(null);
 
 
@@ -26,11 +26,11 @@ const Categories = () => {
       const response = await fetch('https://api.escuelajs.co/api/v1/categories/');
       const data = await response.json();
       setCategories(data);
-      setLoading(false);
+      
     } catch (error) {
-      console.log(error);
-      setError("Error al cargar los personajes");
-      setLoading(false);
+      
+      setError("Error al cargar las categorias");
+      
     }
   });
 
@@ -38,14 +38,14 @@ const Categories = () => {
     return <Loading />
   }
 
-  if (query.isError) {
+  if (query.isError && error) {
     return <Error message={error} />
   }
 
   const isAdmin = () => {
     return isAuthenticated && userData?.role === 'admin';
   };
-  const isUserAdmin = isAdmin(userData);
+  
 
   return (
     <div>

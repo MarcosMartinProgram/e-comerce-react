@@ -23,7 +23,7 @@ const CreateProduct = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const createProductMutation = useMutation((productData) =>
+  const createProductMutation = useMutation((productData: typeof formData) =>
     fetch('https://api.escuelajs.co/api/v1/products/', {
       method: 'POST',
       headers: {

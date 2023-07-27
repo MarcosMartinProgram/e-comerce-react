@@ -1,10 +1,10 @@
-import React, { useContext, ReactNode } from 'react';
+import { useContext, ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 
 interface RequireAdminProps {
   children: ReactNode;
-  fallback?: ReactNode; // Opcional, el componente que se mostrará si el usuario no es admin
+  fallback?: ReactNode; 
 }
 
 const RequireAdmin = ({ children, fallback }: RequireAdminProps) => {

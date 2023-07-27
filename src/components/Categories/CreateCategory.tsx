@@ -1,24 +1,27 @@
 import React, { useState, useContext } from 'react';
 import { useMutation } from 'react-query';
 import Loading from '../Loading';
-import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 
 
 const CreateCategory = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    image: string;
+  }>({
     name: '',
     image: '',
   });
-  const { isAuthenticated, userData, isAdmin } = useContext(AuthContext);
+  
+  const { userData, isAdmin } = useContext(AuthContext);
 
-  const navigate = useNavigate();
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const createCategoryMutation = useMutation((categoryData) =>
+  const createCategoryMutation = useMutation((categoryData: typeof formData) =>
     fetch('https://api.escuelajs.co/api/v1/categories/', {
       method: 'POST',
       headers: {

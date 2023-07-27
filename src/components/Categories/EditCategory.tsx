@@ -5,21 +5,21 @@ import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 
 const EditCategory = () => {
-  const { id } = useParams<{ id: string }>();
-  const categoryId = parseInt(id, 10);
+  const { id } = useParams<{ id?: string }>();
+  const categoryId = parseInt(id || '', 10);
 
   const [formData, setFormData] = useState({
     name: '',
     
   });
 
-  const { isAuthenticated, userData, isAdmin } = useContext(AuthContext);
+  const { userData, isAdmin } = useContext(AuthContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const editCategoryMutation = useMutation((categoryData) =>
+  const editCategoryMutation = useMutation((categoryData: typeof formData) =>
     fetch(`https://api.escuelajs.co/api/v1/categories/${categoryId}`, {
       method: 'PUT',
       headers: {
