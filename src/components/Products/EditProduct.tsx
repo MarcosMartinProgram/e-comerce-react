@@ -4,11 +4,9 @@ import { useParams } from 'react-router-dom';
 import Loading from '../Loading';
 import { AuthContext } from '../../contexts/AuthContext';
 
-interface EditProductProps {
- id:'',
-}
 
-const EditProduct: React.FC<EditProductProps> = () => {
+
+const EditProduct = () => {
   const { id } = useParams<{ id?: string }>();
   const productId = parseInt(id || '', 10);
   
