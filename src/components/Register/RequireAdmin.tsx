@@ -1,22 +1,22 @@
-import React, { useContext, ReactNode } from 'react';
+import { useContext, ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 
 interface RequireAdminProps {
   children: ReactNode;
+  fallback?: ReactNode; 
 }
 
-const RequireAdmin = ({ children }: RequireAdminProps) => {
+const RequireAdmin = ({ children, fallback }: RequireAdminProps) => {
   const authContext = useContext(AuthContext);
 
   if (!authContext.isAuthenticated || authContext.userData?.role !== 'admin') {
-    
-    return <Navigate to="/" replace />;
+    return fallback ? fallback : <Navigate to="/" replace />;
   }
 
-  
   return <>{children}</>;
 };
 
 export default RequireAdmin;
+
 

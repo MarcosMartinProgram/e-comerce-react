@@ -1,51 +1,60 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext, ChangeEvent, FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
+import { AuthContext, UserData } from '../contexts/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
   const { isAuthenticated, login, logout } = useContext(AuthContext);
   const [userName, setUserName] = useState('');
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    email: string;
+    password: string;
+  }>({
     email: '',
     password: '',
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
       const response = await fetch('https://api.escuelajs.co/api/v1/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: new URLSearchParams(formData).toString(),
+        body: JSON.stringify(formData),
       });
       const data = await response.json();
       const { access_token, refresh_token } = data;
-      
-      login(access_token);
+      console.log(formData)
+
+      const userData: UserData = {
+        id: 0, // Puedes dejarlo como 0 o asignar un valor adecuado
+        email: formData.email,
+        password: formData.password,
+        name: '', // Puedes dejarlo en blanco o asignar un valor adecuado
+        role: '', // Puedes dejarlo en blanco o asignar un valor adecuado
+        avatar: '', // Puedes dejarlo en blanco o asignar un valor adecuado
+      };
+
+      login(access_token, userData);
       localStorage.setItem('accessToken', access_token);
-      
       localStorage.setItem('refreshToken', refresh_token);
-      setUserName(formData.email); 
+      setUserName(formData.email);
       navigate('/');
     } catch (error) {
       console.log(error);
     }
+    
   };
 
   const handleLogout = () => {
-    
-    localStorage.removeItem('accessToken');
-    
     logout();
-    
     navigate('/login');
   };
 
@@ -78,6 +87,8 @@ const Login = () => {
 };
 
 export default Login;
+
+
 
 
 

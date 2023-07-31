@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import './Products.css';
 import { useQuery } from 'react-query';
-import { QUERY_KEY_PRODUCTS } from '../constantes/QueryKey';
-import Loading from './Loading';
-import Error from './Error'
+import { QUERY_KEY_PRODUCTS } from '../../constantes/QueryKey';
+import Loading from '../Loading';
+import Error from '../Error';
+import { AuthContext } from '../../contexts/AuthContext';
+import DeleteButton from './DeleteButton';
+
+
 
 interface Product {
   id: number;
@@ -20,40 +24,57 @@ interface Product {
 }
 
 const Products = () => {
+  const { isAuthenticated, userData,  } = useContext(AuthContext);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category');
 
+  
   const [selectedCategory, setSelectedCategory] = useState<string>(category || '');
   const [priceFilter, setPriceFilter] = useState<number | null>(null);
-  const [priceRangeFilter, setPriceRangeFilter] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
+  const [priceRangeFilter, setPriceRangeFilter] = useState<{ min: number | null; max: number | null }>({
+    min: null,
+    max: null,
+  });
+  
   const [titleFilter, setTitleFilter] = useState<string>('');
+  
 
-  const { data: products, isLoading, isError } = useQuery<Product[]>(QUERY_KEY_PRODUCTS, async () => {
+  
+  const { data: products, isLoading, isError, refetch} = useQuery<Product[]>(QUERY_KEY_PRODUCTS, async () => {
     const response = await fetch('https://api.escuelajs.co/api/v1/products/');
     const data = await response.json();
     return data;
   });
 
+  const isAdmin = () => {
+    return isAuthenticated && userData?.role === 'admin';
+  };
   const filterProducts = () => {
-    let filtered = products;
-  
+    let filtered = products || [];
+
     if (selectedCategory) {
       filtered = filtered.filter((product) => product.category.name.toLowerCase() === selectedCategory.toLowerCase());
     }
-  
+
     if (priceFilter) {
       filtered = filtered.filter((product) => product.price === priceFilter);
     }
-  
-    if (priceRangeFilter.min && priceRangeFilter.max) {
-      filtered = filtered.filter((product) => product.price >= priceRangeFilter.min && product.price <= priceRangeFilter.max);
+
+    if (priceRangeFilter.min !== null && priceRangeFilter.max !== null) {
+      filtered = filtered.filter(
+        (product) => {
+          const minPrice = priceRangeFilter.min;
+          const maxPrice = priceRangeFilter.max;
+          return minPrice !== null && maxPrice !== null && product.price >= minPrice && product.price <= maxPrice;
+        }
+      );
     }
-  
+
     if (titleFilter) {
       filtered = filtered.filter((product) => product.title.toLowerCase().includes(titleFilter.toLowerCase()));
     }
-  
+
     return filtered;
   };
   
@@ -71,12 +92,21 @@ const Products = () => {
   }
 
   if (isError) {
-    return <Error message={error} />;
+    return <Error message="Error al cargar los productos" />;
   }
+  const handleDelete = () => {
+    
+    refetch();
+  };
+  
+  
 
   return (
     <div>
       <h1>Products</h1>
+      {isAdmin() && (
+        <Link to="/products/create">Crear Producto</Link>
+      )}
       <div className="filter-menu">
         <select value={selectedCategory} onChange={handleCategoryChange}>
           <option value="">All Categories</option>
@@ -125,13 +155,21 @@ const Products = () => {
             <h2>{product.title}</h2>
             <p>Price: ${product.price}</p>
             <p>{product.description}</p>
+            {isAdmin() && (
+              <React.Fragment>
+                <Link to={`/products/edit/${product.id}`}>Editar Producto</Link>
+                <DeleteButton productId={product.id} onDelete={handleDelete} />
+              </React.Fragment>
+            )}
           </div>
         ))}
       </div>
     </div>
   );
+  
 };
 
 export default Products;
+
 
 

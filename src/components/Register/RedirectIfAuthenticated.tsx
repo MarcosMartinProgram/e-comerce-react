@@ -1,6 +1,6 @@
 import React, { useContext, ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { AuthContext, AuthContextType } from '../../contexts/AuthContext';
+import { AuthContext,  } from '../../contexts/AuthContext';
 
 interface RedirectIfAuthenticatedProps {
   children: ReactNode;
