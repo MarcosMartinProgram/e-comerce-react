@@ -7,8 +7,7 @@ import Loading from '../Loading';
 import Error from '../Error';
 import { AuthContext } from '../../contexts/AuthContext';
 import DeleteButton from './DeleteButton';
-
-
+import { CartContext } from '../../contexts/CartContext'
 
 interface Product {
   id: number;
@@ -21,15 +20,16 @@ interface Product {
     name: string;
     image: string;
   };
+  quantity:number;
 }
 
 const Products = () => {
-  const { isAuthenticated, userData,  } = useContext(AuthContext);
+  const { isAuthenticated, userData } = useContext(AuthContext);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const category = searchParams.get('category');
+  const { addToCart } = useContext(CartContext);
 
-  
   const [selectedCategory, setSelectedCategory] = useState<string>(category || '');
   const [priceFilter, setPriceFilter] = useState<number | null>(null);
   const [priceRangeFilter, setPriceRangeFilter] = useState<{ min: number | null; max: number | null }>({
@@ -38,10 +38,8 @@ const Products = () => {
   });
   
   const [titleFilter, setTitleFilter] = useState<string>('');
-  
 
-  
-  const { data: products, isLoading, isError, refetch} = useQuery<Product[]>(QUERY_KEY_PRODUCTS, async () => {
+  const { data: products, isLoading, isError, refetch } = useQuery<Product[]>(QUERY_KEY_PRODUCTS, async () => {
     const response = await fetch('https://api.escuelajs.co/api/v1/products/');
     const data = await response.json();
     return data;
@@ -50,6 +48,7 @@ const Products = () => {
   const isAdmin = () => {
     return isAuthenticated && userData?.role === 'admin';
   };
+
   const filterProducts = () => {
     let filtered = products || [];
 
@@ -77,15 +76,14 @@ const Products = () => {
 
     return filtered;
   };
-  
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(event.target.value);
   };
 
   useEffect(() => {
-    filterProducts();
-  }, [products, selectedCategory]);
+    refetch(); 
+  }, [selectedCategory, refetch]);
 
   if (isLoading) {
     return <Loading />;
@@ -94,12 +92,16 @@ const Products = () => {
   if (isError) {
     return <Error message="Error al cargar los productos" />;
   }
+
   const handleDelete = () => {
-    
     refetch();
   };
-  
-  
+
+  const handleAddToCart = (product: Product) => {
+    addToCart(product);
+  }
+
+  const filteredProducts = filterProducts(); 
 
   return (
     <div>
@@ -110,7 +112,7 @@ const Products = () => {
       <div className="filter-menu">
         <select value={selectedCategory} onChange={handleCategoryChange}>
           <option value="">All Categories</option>
-          {Array.from(new Set(products?.map((product) => product.category.name))).map((categoryName) => (
+          {Array.from(new Set(filteredProducts?.map((product) => product.category.name))).map((categoryName) => (
             <option value={categoryName.toLowerCase()} key={categoryName}>
               {categoryName}
             </option>
@@ -149,12 +151,13 @@ const Products = () => {
       />
       {selectedCategory && <h2>Category: {selectedCategory}</h2>}
       <div className="product-list">
-        {filterProducts()?.map((product) => (
+        {filteredProducts.map((product) => (
           <div className="product-card" key={product.id}>
             <img src={product.images[0]} alt={product.title} />
             <h2>{product.title}</h2>
             <p>Price: ${product.price}</p>
             <p>{product.description}</p>
+            <button onClick={() => handleAddToCart(product)}>Agregar al carrito</button>
             {isAdmin() && (
               <React.Fragment>
                 <Link to={`/products/edit/${product.id}`}>Editar Producto</Link>
@@ -166,10 +169,6 @@ const Products = () => {
       </div>
     </div>
   );
-  
 };
 
 export default Products;
-
-
-

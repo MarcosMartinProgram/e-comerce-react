@@ -1,11 +1,13 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
+import { CartContext } from '../../contexts/CartContext'
 
 import './Navbar.css';
 
 const Navbar = () => {
   const { isAuthenticated, userData, logout } = useContext(AuthContext);
+  const { totalItems, totalPrice } = useContext(CartContext);
 
   const handleLogout = () => {
     logout();
@@ -57,6 +59,16 @@ const Navbar = () => {
             </li>
           )}
         </ul>
+      </div>
+      <div className="navbar-cart">
+        <Link to="/cart-detail">
+          <div>
+            <img  src="src\components\img\shopping-cart_1404390.png" alt="Carrito" />
+          </div>
+          <p>Ítems: {totalItems}</p>
+          <p>Total: ${totalPrice}</p>
+        
+        </Link>
       </div>
     </nav>
   );

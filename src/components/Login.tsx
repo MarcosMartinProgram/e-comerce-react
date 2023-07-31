@@ -34,12 +34,12 @@ const Login = () => {
       console.log(formData)
 
       const userData: UserData = {
-        id: 0, // Puedes dejarlo como 0 o asignar un valor adecuado
+        id: 0, 
         email: formData.email,
         password: formData.password,
-        name: '', // Puedes dejarlo en blanco o asignar un valor adecuado
-        role: '', // Puedes dejarlo en blanco o asignar un valor adecuado
-        avatar: '', // Puedes dejarlo en blanco o asignar un valor adecuado
+        name: '', 
+        role: '', 
+        avatar: '', 
       };
 
       login(access_token, userData);
