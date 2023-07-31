@@ -6,6 +6,7 @@ import { QUERY_KEY_PRODUCTS } from '../../constantes/QueryKey';
 import Loading from '../Loading';
 import Error from '../Error';
 import { AuthContext } from '../../contexts/AuthContext';
+import DeleteButton from './DeleteButton';
 
 
 
@@ -40,7 +41,7 @@ const Products = () => {
   
 
   
-  const { data: products, isLoading, isError } = useQuery<Product[]>(QUERY_KEY_PRODUCTS, async () => {
+  const { data: products, isLoading, isError, refetch} = useQuery<Product[]>(QUERY_KEY_PRODUCTS, async () => {
     const response = await fetch('https://api.escuelajs.co/api/v1/products/');
     const data = await response.json();
     return data;
@@ -93,6 +94,11 @@ const Products = () => {
   if (isError) {
     return <Error message="Error al cargar los productos" />;
   }
+  const handleDelete = () => {
+    
+    refetch();
+  };
+  
   
 
   return (
@@ -150,13 +156,17 @@ const Products = () => {
             <p>Price: ${product.price}</p>
             <p>{product.description}</p>
             {isAdmin() && (
-              <Link to={`/products/edit/${product.id}`}>Editar Producto</Link>
+              <React.Fragment>
+                <Link to={`/products/edit/${product.id}`}>Editar Producto</Link>
+                <DeleteButton productId={product.id} onDelete={handleDelete} />
+              </React.Fragment>
             )}
           </div>
         ))}
       </div>
     </div>
   );
+  
 };
 
 export default Products;
