@@ -16,7 +16,7 @@ interface Category {
 
 const Categories = () => {
   const { isAuthenticated, userData } = useContext(AuthContext);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   const { data: categories, isLoading, isError } = useQuery<Category[]>(QUERY_KEY_CATEGORIES, async () => {
