@@ -20,14 +20,10 @@ const Categories = () => {
   const queryClient = useQueryClient();
 
   const { data: categories, isLoading, isError } = useQuery<Category[]>(QUERY_KEY_CATEGORIES, async () => {
-    try {
       const response = await fetch('https://api.escuelajs.co/api/v1/categories/');
       const data = await response.json();
       return data;
-    } catch (error) {
-      setError("Error al cargar las categorias");
-      
-    }
+    
   });
 
   if (isLoading) {
