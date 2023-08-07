@@ -23,21 +23,23 @@ const CartDetail: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="detalle-productos-container">
       <h2>Detalle de productos</h2>
       {cartItems.length === 0 ? (
         <p>Tu carrito está vacío.</p>
       ) : (
         <div>
           <h3>Productos en el carrito:</h3>
-          <ul>
+          <ul className="detalle-productos-list">
             {cartItems.map((item) => (
-              <li key={item.id}>
+              <li className="detalle-productos-item" key={item.id}>
                 <p>{item.title}</p>
                 <p>Cantidad: {item.quantity}</p>
-                <button onClick={() => handleIncrement(item.id)}>+1</button>
-                <button onClick={() => handleDecrement(item.id)}>-1</button>
-                <button onClick={() => removeCartItem(item.id)}>Eliminar</button>
+                <div className="detalle-productos-buttons">
+                  <button onClick={() => handleIncrement(item.id)}>+1</button>
+                  <button onClick={() => handleDecrement(item.id)}>-1</button>
+                  <button onClick={() => removeCartItem(item.id)}>Eliminar</button>
+                </div>
                 <p>Precio unitario: ${item.price}</p>
                 <p>Total: ${item.price * item.quantity}</p>
               </li>

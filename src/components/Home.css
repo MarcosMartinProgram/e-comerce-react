@@ -1,2 +1,24 @@
+body {
+    margin: 0 20%;
+}
+.home-container{
+    display: flex;
+    margin:0 auto;
+    overflow-x: hidden;
+}
+.home{
+    display: flex;
+    cursor: grab;
+}
+.item{
+    
+    height: auto;
+    max-width: auto;
+    padding: 1rem;
 
-  
+}
+.item img{
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+}

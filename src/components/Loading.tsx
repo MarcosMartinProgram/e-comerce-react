@@ -1,4 +1,3 @@
-//import React from "react";
 import './LoadingError.css'
 
 function Loading() {

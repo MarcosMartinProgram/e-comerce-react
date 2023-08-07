@@ -4,21 +4,23 @@
     gap: 20px;
   }
   
+  
   .category-card {
     background-color: #f0f0f0;
     padding: 20px;
     text-align: center;
+    border-radius: 10px;
   }
   
   .category-card img {
-    width: 100%;
-    max-height: 200px;
-    object-fit: cover;
-    margin-bottom: 10px;
+    width: 80%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   }
   
   .category-card h2 {
     font-size: 18px;
+    color:#333;
     margin-bottom: 10px;
   }
   
@@ -30,6 +32,7 @@
     text-decoration: none;
     border-radius: 4px;
   }
+
   
   .category-card a:hover {
     background-color: #555;

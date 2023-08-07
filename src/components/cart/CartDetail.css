@@ -1,0 +1,49 @@
+.centered-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh; 
+    text-align: center;
+  }
+  .detalle-productos-container {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .detalle-productos-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .detalle-productos-item {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+  }
+  
+  .detalle-productos-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .detalle-productos-buttons button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .detalle-productos-buttons button:hover {
+    background-color: #555;
+  }
+  
+  .detalle-productos-buttons button:active {
+    transform: scale(0.95);
+  }

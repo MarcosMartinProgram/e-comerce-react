@@ -1,6 +1,7 @@
 import { useState, useContext, ChangeEvent, FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext, UserData } from '../contexts/AuthContext';
+import './Login.css'
 
 const Login = () => {
   const navigate = useNavigate();
@@ -68,20 +69,40 @@ const Login = () => {
   }
 
   return (
-    <div>
-      <h1>Iniciar sesión</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Correo electrónico:</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Contraseña:</label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange} />
-        </div>
-        <button type="submit">Iniciar sesión</button>
-      </form>
-      <p>No tienes una cuenta? <Link to="/register">Regístrate aquí</Link></p>
+    <div className='login-form-container'>
+      <div className='login-form'>
+        <h1 className='text-center mb-4'>Iniciar sesión</h1>
+        <form onSubmit={handleSubmit}>
+          <div className='mb-3'>
+            <label htmlFor='email'>Correo electrónico:</label>
+            <input
+              type='email'
+              className='form-control'
+              id='email'
+              name='email'
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+          <div className='mb-3'>
+            <label htmlFor='password'>Contraseña:</label>
+            <input
+              type='password'
+              className='form-control'
+              id='password'
+              name='password'
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
+          <button type='submit' className='btn btn-primary'>
+            Iniciar sesión
+          </button>
+        </form>
+        <p className='text-center mt-3'>
+          No tienes una cuenta? <Link to='/register'>Regístrate aquí</Link>
+        </p>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Register.css'
 
 const Register = () => {
   const navigate = useNavigate();
@@ -38,27 +39,59 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <h1>Registro</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nombre:</label>
-          <input type="text" name="name" value={formData.name} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Correo electrónico:</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Contraseña:</label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Avatar:</label>
-          <input type="text" name="avatar" value={formData.avatar} onChange={handleChange} />
-        </div>
-        <button type="submit">Registrarse</button>
-      </form>
+    <div className='registration-form-container'>
+      <div className='registration-form'>
+        <h1 className='text-center mb-4'>Registro</h1>
+        <form onSubmit={handleSubmit}>
+          <div className='mb-3'>
+            <label htmlFor='name'>Nombre:</label>
+            <input
+              type='text'
+              className='form-control'
+              id='name'
+              name='name'
+              value={formData.name}
+              onChange={handleChange}
+            />
+          </div>
+          <div className='mb-3'>
+            <label htmlFor='email'>Correo electrónico:</label>
+            <input
+              type='email'
+              className='form-control'
+              id='email'
+              name='email'
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+          <div className='mb-3'>
+            <label htmlFor='password'>Contraseña:</label>
+            <input
+              type='password'
+              className='form-control'
+              id='password'
+              name='password'
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
+          <div className='mb-3'>
+            <label htmlFor='avatar'>Avatar:</label>
+            <input
+              type='text'
+              className='form-control'
+              id='avatar'
+              name='avatar'
+              value={formData.avatar}
+              onChange={handleChange}
+            />
+          </div>
+          <button type='submit' className='btn btn-primary'>
+            Registrarse
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
