@@ -109,6 +109,7 @@ const Products = () => {
       {isAdmin() && (
         <Link to="/products/create">Crear Producto</Link>
       )}
+      {/* Filtros en la parte superior */}
       <div className="filter-menu">
         <select value={selectedCategory} onChange={handleCategoryChange}>
           <option value="">All Categories</option>
@@ -118,14 +119,12 @@ const Products = () => {
             </option>
           ))}
         </select>
-      </div>
-      <input
-        type="number"
-        placeholder="Price"
-        value={priceFilter || ''}
-        onChange={(e) => setPriceFilter(e.target.value !== '' ? parseInt(e.target.value, 10) : null)}
-      />
-      <div>
+        <input
+          type="number"
+          placeholder="Price"
+          value={priceFilter || ''}
+          onChange={(e) => setPriceFilter(e.target.value !== '' ? parseInt(e.target.value, 10) : null)}
+        />
         <input
           type="number"
           placeholder="Min Price"
@@ -142,15 +141,15 @@ const Products = () => {
             setPriceRangeFilter((prev) => ({ ...prev, max: e.target.value !== '' ? parseInt(e.target.value, 10) : null }))
           }
         />
+        <input
+          type="text"
+          placeholder="Title"
+          value={titleFilter}
+          onChange={(e) => setTitleFilter(e.target.value)}
+        />
       </div>
-      <input
-        type="text"
-        placeholder="Title"
-        value={titleFilter}
-        onChange={(e) => setTitleFilter(e.target.value)}
-      />
-      {selectedCategory && <h2>Category: {selectedCategory}</h2>}
       <div className="product-list">
+        {/* Renderizar las tarjetas de productos */}
         {filteredProducts.map((product) => (
           <div className="product-card" key={product.id}>
             <img src={product.images[0]} alt={product.title} />

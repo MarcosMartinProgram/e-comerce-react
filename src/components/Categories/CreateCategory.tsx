@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useMutation } from 'react-query';
 import Loading from '../Loading';
 import { AuthContext } from '../../contexts/AuthContext';
+import './CreateCategories.css'
 
 
 const CreateCategory = () => {
@@ -44,7 +45,7 @@ const CreateCategory = () => {
 
 
   return (
-    <div>
+    <div className="form">
       <h1>Crear Categoría</h1>
       {createCategoryMutation.isLoading && <Loading />}
       {createCategoryMutation.isSuccess && (
@@ -54,7 +55,7 @@ const CreateCategory = () => {
         <p>Error al crear la categoría</p>
       )}
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-input">
           <label>Nombre:</label>
           <input
             type="text"
@@ -63,7 +64,7 @@ const CreateCategory = () => {
             onChange={handleChange}
           />
         </div>
-        <div>
+        <div className="form-input">
           <label>Imagen:</label>
           <input
             type="text"
@@ -72,7 +73,7 @@ const CreateCategory = () => {
             onChange={handleChange}
           />
         </div>
-        <button type="submit">Crear Categoría</button>
+        <button className="btn btn-primary" type="submit">Crear Categoría</button>
       </form>
     </div>
   );

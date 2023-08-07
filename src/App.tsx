@@ -10,6 +10,7 @@ import Products from './components/Products/Products';
 import ProductDetail from './components/ProductDetail';
 import CreateProduct from './components/Products/CreateProduct';
 import EditProduct from './components/Products/EditProduct';
+import Footer from './components/footer/Footer';
 import CartDetail from './components/cart/CartDetail';
 import PurchaseSuccess from './components/cart/PurchaseSuccess';
 import Navbar from './components/Navbar/Navbar';
@@ -30,6 +31,7 @@ function App() {
         <CartProvider>
           <Router>
             <Navbar />
+            
             <Routes>
               <Route path="/login" element={
                 <RedirectIfAuthenticated>
@@ -71,6 +73,7 @@ function App() {
               <Route path="purchase-success" element={<PurchaseSuccess/>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <Footer/>
           </Router>
         </CartProvider>
       </AuthProvider>

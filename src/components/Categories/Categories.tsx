@@ -41,7 +41,7 @@ const Categories = () => {
   return (
     <div>
       <h1>Categories</h1>
-      {isAdmin() && <Link to="/categories/create">Crear Categoria</Link>}
+      {isAdmin() && <Link className='crear' to="/categories/create">Crear Categoria</Link>}
       <div className="category-list">
         {categories?.map((category) => (
           <div className="category-card" key={category.id}>

@@ -46,13 +46,13 @@ const CreateProduct = () => {
   }
 
   return (
-    <div>
+    <div className="form">
       <h1>Crear Producto</h1>
       {createProductMutation.isLoading && <Loading />}
       {createProductMutation.isSuccess && <p>Producto creado exitosamente</p>}
       {createProductMutation.isError && <p>Error al crear el producto</p>}
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-input">
           <label>Título:</label>
           <input
             type="text"
@@ -61,7 +61,7 @@ const CreateProduct = () => {
             onChange={handleChange}
           />
         </div>
-        <div>
+        <div className="form-input">
           <label>Precio:</label>
           <input
             type="number"
@@ -70,7 +70,7 @@ const CreateProduct = () => {
             onChange={handleChange}
           />
         </div>
-        <div>
+        <div className="form-input">
           <label>Descripción:</label>
           <input
             type="text"
@@ -79,7 +79,7 @@ const CreateProduct = () => {
             onChange={handleChange}
           />
         </div>
-        <div>
+        <div className="form-input">
           <label>Categoría:</label>
           <input
             type="number"
@@ -88,16 +88,20 @@ const CreateProduct = () => {
             onChange={handleChange}
           />
         </div>
-        <div>
+        <div className="form-input">
           <label>Imágenes:</label>
           <input
             type="text"
             name="images"
             value={formData.images[0]}
-            onChange={(e) => setFormData({ ...formData, images: [e.target.value] })}
+            onChange={(e) =>
+              setFormData({ ...formData, images: [e.target.value] })
+            }
           />
         </div>
-        <button type="submit">Crear Producto</button>
+        <button type="submit" className="btn">
+          Crear Producto
+        </button>
       </form>
     </div>
   );
